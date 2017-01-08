@@ -39,7 +39,55 @@ fn closure_as_parameter() {
     println!("double 3: {}", apply_to_3(double));
 }
 
+fn call_me<F: Fn()>(f: F) {
+    f();
+}
+
+fn input_functions() {
+    let lambda = || {
+        println!("This is a closure");
+    };
+
+    fn function() {
+        println!("this is a function");
+    }
+
+    call_me(lambda);
+    call_me(function);
+}
+
+fn create_fn() -> Box<Fn()> {
+    let text = "fn".to_owned();
+    Box::new(move || println!("this is {}", text))
+}
+
+fn create_fn_mut() -> Box<FnMut()> {
+    let text = "fn_mut".to_owned();
+    Box::new(move || println!("this is {}", text))
+}
+
+fn output_parameter() {
+    let fn1 = create_fn();
+    let mut fn2 = create_fn_mut();
+
+    fn1();
+    fn2();
+}
+
+fn std_iterator() {
+    let vec1 = vec![1, 2, 3];
+    let vec2 = vec![4, 5, 6];
+
+    println!("2 in vec1 is {}", vec1.iter().any( |&x|x==2 ) );
+    println!("2 in vec2 is {}", vec2.into_iter().any( |x|x==2 ));
+}
+
 fn main() {
     closure();
     closure_as_parameter();
+    input_functions();
+    output_parameter();
+
+    std_iterator();
 }
+
